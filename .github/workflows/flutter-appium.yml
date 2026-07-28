@@ -54,10 +54,12 @@ jobs:
       - name: 8. Run Appium Tests on Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: 30
           target: google_apis
           arch: x86_64
-          profile: Pixel_6
+          profile: pixel
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: |
             # Start Appium Server in Background
             appium --log appium-server.log &
