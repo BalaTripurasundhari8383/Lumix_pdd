@@ -51,11 +51,17 @@ jobs:
         working-directory: e2e
         run: npm ci || npm install
 
-      - name: 8. Run Appium Tests on Android Emulator
+      - name: 8. Enable KVM Hardware Acceleration Permissions
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm-nodes.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+          sudo chmod 777 /dev/kvm || true
+
+      - name: 9. Run Appium Tests on Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          target: default
+          target: google_apis
           arch: x86_64
           force-avd-creation: false
           disable-animations: true
