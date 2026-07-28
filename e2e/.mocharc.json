@@ -1,0 +1,18 @@
+{
+  "diff": true,
+  "extension": ["js"],
+  "package": "./package.json",
+  "reporter": "mochawesome",
+  "reporter-option": [
+    "reportDir=reports",
+    "reportFilename=index",
+    "html=true",
+    "json=true",
+    "overwrite=true",
+    "consoleReporter=spec",
+    "reportTitle=Flutter Android E2E Appium Test Report"
+  ],
+  "slow": "75",
+  "timeout": "180000",
+  "ui": "bdd"
+}

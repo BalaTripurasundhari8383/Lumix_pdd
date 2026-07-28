@@ -1,0 +1,40 @@
+{
+  "name": "flutter-appium-e2e-framework",
+  "version": "1.0.0",
+  "description": "Enterprise-grade Appium 2.x E2E Test Automation Framework for Flutter Android Applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --config .mocharc.json e2e/tests/**/*.spec.js",
+    "test:auth": "mocha --config .mocharc.json e2e/tests/auth.spec.js",
+    "test:forms": "mocha --config .mocharc.json e2e/tests/forms.spec.js",
+    "test:components": "mocha --config .mocharc.json e2e/tests/components.spec.js",
+    "test:ai": "mocha --config .mocharc.json e2e/tests/aiSmart.spec.js",
+    "report:merge": "mochawesome-merge reports/mochawesome-report/*.json > reports/mochawesome.json",
+    "report:generate": "marge reports/mochawesome.json --reportDir reports --reportFilename index.html"
+  },
+  "keywords": [
+    "appium",
+    "flutter",
+    "appium-flutter-driver",
+    "uiautomator2",
+    "mocha",
+    "chai",
+    "exceljs",
+    "winston",
+    "e2e-testing",
+    "android-automation"
+  ],
+  "author": "QA Automation Architect",
+  "license": "MIT",
+  "dependencies": {
+    "appium-flutter-finder": "^0.4.0",
+    "chai": "^4.4.1",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "mocha": "^10.4.0",
+    "mochawesome": "^7.1.3",
+    "mochawesome-report-generator": "^6.2.0",
+    "webdriverio": "^8.38.0",
+    "winston": "^3.13.0"
+  }
+}
