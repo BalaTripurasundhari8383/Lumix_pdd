@@ -1,0 +1,28 @@
+{
+  "name": "lumixxx-e2e-automation",
+  "version": "1.0.0",
+  "description": "Production-ready E2E automation framework for Flutter Android APK using Appium 2.x",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha src/tests/**/*.test.js --timeout 300000",
+    "report": "mochawesome-merge reports/mochawesome-results/*.json > reports/report.json && marge reports/report.json -o reports/html",
+    "lint": "eslint src/**/*.js"
+  },
+  "dependencies": {
+    "appium": "^2.11.0",
+    "appium-flutter-driver": "^2.10.0",
+    "appium-uiautomator2-driver": "^3.7.0",
+    "chai": "^4.3.7",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "fs-extra": "^11.2.0",
+    "mocha": "^10.4.0",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  }
+}
