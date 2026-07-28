@@ -11,6 +11,7 @@ class FormsPage extends BasePage {
     this.passwordField = this.byValueKey('form_password_input');
     this.nameField = this.byValueKey('form_name_input');
     this.datePickerTrigger = this.byValueKey('form_date_picker');
+    this.datePickerConfirm = this.byText('OK');
     this.departmentDropdown = this.byValueKey('form_department_dropdown');
     this.termsCheckbox = this.byValueKey('form_terms_checkbox');
     this.genderRadioMale = this.byValueKey('form_gender_male');
@@ -19,10 +20,12 @@ class FormsPage extends BasePage {
     this.submitFormButton = this.byValueKey('form_submit_btn');
     
     // Validation Error Message Locators
+    this.nameValidationError = this.byValueKey('name_val_error');
     this.emailValidationError = this.byValueKey('email_val_error');
     this.phoneValidationError = this.byValueKey('phone_val_error');
     this.passwordValidationError = this.byValueKey('password_val_error');
     this.generalFormError = this.byValueKey('form_general_error');
+    this.selectedDateDisplay = this.byValueKey('selected_date_text');
   }
 
   async fillEmail(email) {
@@ -39,6 +42,14 @@ class FormsPage extends BasePage {
 
   async fillName(name) {
     await this.typeInput(this.nameField, name);
+  }
+
+  async selectDate() {
+    logger.info('Opening Flutter DatePicker dialog...');
+    await this.clickElement(this.datePickerTrigger);
+    if (await this.isElementDisplayed(this.datePickerConfirm, 3000)) {
+      await this.clickElement(this.datePickerConfirm);
+    }
   }
 
   async selectDepartment(deptName) {
@@ -62,6 +73,11 @@ class FormsPage extends BasePage {
     }
   }
 
+  async toggleNotificationsSwitch() {
+    logger.info('Toggling notifications switch...');
+    await this.clickElement(this.notificationsSwitch);
+  }
+
   async submitForm() {
     logger.info('Submitting form...');
     await this.clickElement(this.submitFormButton);
@@ -77,6 +93,33 @@ class FormsPage extends BasePage {
 
   async getPasswordErrorText() {
     return await this.getElementText(this.passwordValidationError);
+  }
+
+  async getNameErrorText() {
+    return await this.getElementText(this.nameValidationError);
+  }
+
+  /**
+   * Captures actual validation messages displayed by Flutter widgets.
+   */
+  async getCapturedValidationMessages() {
+    const messages = {};
+    if (await this.isElementDisplayed(this.nameValidationError, 2000)) {
+      messages.name = await this.getNameErrorText();
+    }
+    if (await this.isElementDisplayed(this.emailValidationError, 2000)) {
+      messages.email = await this.getEmailErrorText();
+    }
+    if (await this.isElementDisplayed(this.phoneValidationError, 2000)) {
+      messages.phone = await this.getPhoneErrorText();
+    }
+    if (await this.isElementDisplayed(this.passwordValidationError, 2000)) {
+      messages.password = await this.getPasswordErrorText();
+    }
+    if (await this.isElementDisplayed(this.generalFormError, 2000)) {
+      messages.general = await this.getElementText(this.generalFormError);
+    }
+    return messages;
   }
 }
 

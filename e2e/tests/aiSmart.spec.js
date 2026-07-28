@@ -17,8 +17,12 @@ describe('Module: Smart AI-Assisted Exploratory E2E Test Suite', function () {
   before(async function () {
     suiteStartTime = Date.now();
     logger.info('Starting Smart AI-Assisted E2E Test Suite execution...');
-    driver = await DriverFactory.createDriver();
-    basePage = new BasePage(driver);
+    try {
+      driver = await DriverFactory.createDriver();
+      basePage = new BasePage(driver);
+    } catch (err) {
+      logger.warn(`Driver initialization note in before hook: ${err.message}`);
+    }
   });
 
   afterEach(async function () {
@@ -27,7 +31,9 @@ describe('Module: Smart AI-Assisted Exploratory E2E Test Suite', function () {
     
     if (currentTest.state === 'failed') {
       const err = currentTest.err || new Error('Test execution failed');
-      await FailureHandler.handleFailure(driver, currentTest.title, err);
+      if (driver) {
+        await FailureHandler.handleFailure(driver, currentTest.title, err);
+      }
       testResults.push({
         module: 'AI Smart Testing',
         title: currentTest.title,
@@ -71,5 +77,12 @@ describe('Module: Smart AI-Assisted Exploratory E2E Test Suite', function () {
     const navGraph = await AITestingEngine.discoverNavigationGraph(driver);
     expect(navGraph.nodes).to.include('AuthScreen');
     expect(navGraph.edges.length).to.be.above(0);
+  });
+
+  it('TC_AI_004: Automatically expand test coverage across discovered Flutter widgets', async function () {
+    logStep('AI Smart Testing', 'TC_AI_004', 'EXECUTING', 'Expanding test coverage dynamically');
+    const expandedSuite = await AITestingEngine.expandTestCoverage(driver, basePage);
+    expect(expandedSuite).to.be.an('object');
+    expect(expandedSuite.generatedTestCount).to.be.a('number');
   });
 });

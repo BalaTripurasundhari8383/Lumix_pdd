@@ -9,20 +9,23 @@
     "lint": "eslint src/**/*.js"
   },
   "dependencies": {
-    "appium": "^2.11.0",
-    "appium-flutter-driver": "^2.10.0",
-    "appium-uiautomator2-driver": "^3.7.0",
-    "chai": "^4.3.7",
+    "appium": "^2.11.3",
+    "appium-flutter-driver": "^2.10.1",
+    "appium-uiautomator2-driver": "^3.7.8",
+    "chai": "^4.4.1",
     "dotenv": "^16.4.5",
     "exceljs": "^4.4.0",
     "fs-extra": "^11.2.0",
-    "mocha": "^10.4.0",
+    "mocha": "^10.7.3",
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.3.0",
     "mochawesome-report-generator": "^6.2.0",
-    "winston": "^3.13.0"
+    "winston": "^3.14.2"
   },
   "devDependencies": {
-    "eslint": "^8.57.0"
+    "eslint": "^8.57.1"
+  },
+  "overrides": {
+    "ws": "^8.18.0"
   }
 }

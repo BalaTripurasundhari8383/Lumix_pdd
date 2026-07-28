@@ -16,9 +16,9 @@ function getConnectedDevice() {
       }
     }
   } catch (error) {
-    // ADB not in PATH or no device connected
+    // ADB not in PATH or execution failed
   }
-  return env.deviceName;
+  return null;
 }
 
 /**
@@ -26,21 +26,24 @@ function getConnectedDevice() {
  * @param {string} automationType - 'Flutter' | 'UiAutomator2'
  */
 function getAppiumOptions(automationType = env.automationName) {
-  const deviceUdid = getConnectedDevice();
+  const deviceUdid = getConnectedDevice() || env.deviceName;
   const apkExists = fs.existsSync(env.apkPath);
 
   const capabilities = {
     platformName: env.platformName,
     'appium:automationName': automationType,
     'appium:deviceName': deviceUdid,
-    'appium:udid': deviceUdid,
     'appium:appPackage': env.appPackage,
     'appium:appActivity': env.appActivity,
     'appium:newCommandTimeout': Math.floor(env.commandTimeoutMs / 1000),
-    'appium:autoGrantPermissions': env.autoGrantPermissions,
-    'appium:noReset': env.noReset,
-    'appium:fullReset': env.fullReset
+    'appium:autoGrantPermissions': true,
+    'appium:noReset': true,
+    'appium:fullReset': false
   };
+
+  if (getConnectedDevice()) {
+    capabilities['appium:udid'] = deviceUdid;
+  }
 
   if (apkExists) {
     capabilities['appium:app'] = env.apkPath;
@@ -51,7 +54,9 @@ function getAppiumOptions(automationType = env.automationName) {
     port: env.appiumPort,
     path: env.appiumPath,
     logLevel: 'error',
-    capabilities
+    capabilities,
+    connectionRetryTimeout: 15000,
+    connectionRetryCount: 1
   };
 }
 

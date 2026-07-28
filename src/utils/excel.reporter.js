@@ -53,6 +53,18 @@ class ExcelReporter {
         sheet.addRows(failedTests);
     }
 
+    async generateExecutionLogs(logs) {
+        const sheet = this.workbook.addWorksheet('Execution Logs');
+        sheet.columns = [
+            { header: 'Timestamp', key: 'timestamp', width: 25 },
+            { header: 'Test Name', key: 'testName', width: 30 },
+            { header: 'Step', key: 'step', width: 30 },
+            { header: 'Result', key: 'result', width: 15 },
+            { header: 'Remarks', key: 'remarks', width: 40 }
+        ];
+        sheet.addRows(logs);
+    }
+
     async save() {
         await fs.ensureDir(path.dirname(this.reportPath));
         await this.workbook.xlsx.writeFile(this.reportPath);
