@@ -25,7 +25,6 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: 'e2e/package-lock.json'
 
       - name: 3. Setup Java (JDK 17)
         uses: actions/setup-java@v4
@@ -46,6 +45,8 @@ jobs:
 
       - name: 6. Install Global Appium 2.x & Drivers
         run: |
+          mkdir -p ~/.appium
+          export APPIUM_HOME=$HOME/.appium
           npm install -g appium@next
           appium driver install --source=npm appium-flutter-driver || true
           appium driver install uiautomator2 || true
@@ -53,8 +54,10 @@ jobs:
           appium driver list
 
       - name: 7. Install E2E Framework Dependencies
-        working-directory: e2e
-        run: npm ci || npm install
+        run: |
+          npm install
+          cd e2e
+          npm install
 
       - name: 8. Enable KVM Hardware Acceleration Permissions
         run: |
@@ -72,6 +75,7 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -no-snapshot-save -no-audio -no-boot-anim -camera-back none
           script: |
+            export APPIUM_HOME=$HOME/.appium
             echo "Starting Appium Server safely in background..."
             nohup appium --log appium-server.log > /dev/null 2>&1 &
             sleep 8
