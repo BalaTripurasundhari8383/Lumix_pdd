@@ -15,7 +15,7 @@ class BasePage {
     if (DriverFactory.getAutomationName() === 'Flutter') {
       return byValueKey(key);
     }
-    return `~${key}`; // Fallback to Accessibility ID for UiAutomator2
+    return `//*[@content-desc="${key}" or @resource-id="${key}" or @text="${key}" or contains(@content-desc, "${key}") or contains(@resource-id, "${key}")]`;
   }
 
   /**
