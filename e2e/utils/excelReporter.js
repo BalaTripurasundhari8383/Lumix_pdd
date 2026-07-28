@@ -152,14 +152,24 @@ class ExcelReporter {
       cell.alignment = { vertical: 'middle', horizontal: 'center' };
     });
 
-    // Save Workbook
+    // Save Workbook with EBUSY file lock protection
     const reportsDir = env.reportsDir;
     if (!fs.existsSync(reportsDir)) fs.mkdirSync(reportsDir, { recursive: true });
     
     const excelPath = path.join(reportsDir, 'Flutter_E2E_Report.xlsx');
-    await workbook.xlsx.writeFile(excelPath);
-    logger.info(`Excel report generated successfully at: ${excelPath}`);
-    return excelPath;
+    try {
+      await workbook.xlsx.writeFile(excelPath);
+      logger.info(`Excel report generated successfully at: ${excelPath}`);
+      return excelPath;
+    } catch (err) {
+      if (err.code === 'EBUSY' || String(err).includes('EBUSY')) {
+        const fallbackPath = path.join(reportsDir, `Flutter_E2E_Report_${Date.now()}.xlsx`);
+        await workbook.xlsx.writeFile(fallbackPath);
+        logger.warn(`Primary Excel file locked by open application. Saved fallback report to: ${fallbackPath}`);
+        return fallbackPath;
+      }
+      throw err;
+    }
   }
 }
 
