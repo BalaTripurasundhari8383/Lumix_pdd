@@ -4,11 +4,11 @@
   "description": "Enterprise-grade Appium 2.x E2E Test Automation Framework for Flutter Android Applications",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --config .mocharc.json e2e/tests/**/*.spec.js",
-    "test:auth": "mocha --config .mocharc.json e2e/tests/auth.spec.js",
-    "test:forms": "mocha --config .mocharc.json e2e/tests/forms.spec.js",
-    "test:components": "mocha --config .mocharc.json e2e/tests/components.spec.js",
-    "test:ai": "mocha --config .mocharc.json e2e/tests/aiSmart.spec.js",
+    "test": "mocha --config .mocharc.json \"tests/**/*.spec.js\"",
+    "test:auth": "mocha --config .mocharc.json \"tests/auth.spec.js\"",
+    "test:forms": "mocha --config .mocharc.json \"tests/forms.spec.js\"",
+    "test:components": "mocha --config .mocharc.json \"tests/components.spec.js\"",
+    "test:ai": "mocha --config .mocharc.json \"tests/aiSmart.spec.js\"",
     "report:merge": "mochawesome-merge reports/mochawesome-report/*.json > reports/mochawesome.json",
     "report:generate": "marge reports/mochawesome.json --reportDir reports --reportFilename index.html"
   },
