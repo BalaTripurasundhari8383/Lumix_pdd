@@ -20,8 +20,8 @@ module.exports = {
   appPackage: process.env.APP_PACKAGE || 'com.example.lumixxx',
   appActivity: process.env.APP_ACTIVITY || 'com.example.lumixxx.MainActivity',
 
-  automationName: process.env.AUTOMATION_NAME || 'Flutter',
-  fallbackAutomationName: process.env.FALLBACK_AUTOMATION_NAME || 'UiAutomator2',
+  automationName: process.env.AUTOMATION_NAME || 'UiAutomator2',
+  fallbackAutomationName: process.env.FALLBACK_AUTOMATION_NAME || 'Flutter',
   deviceName: process.env.DEVICE_NAME || 'Android Emulator',
   platformName: process.env.PLATFORM_NAME || 'Android',
   platformVersion: process.env.PLATFORM_VERSION || '14.0',
