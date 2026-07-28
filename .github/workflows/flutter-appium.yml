@@ -59,7 +59,7 @@ jobs:
           arch: x86_64
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-window -no-snapshot-save -no-audio -no-boot-anim -camera-back none
           script: |
             # Start Appium Server in Background
             appium --log appium-server.log &
