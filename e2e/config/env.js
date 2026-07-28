@@ -1,6 +1,16 @@
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
+// Auto-detect & export ANDROID_HOME on Windows if missing
+if (!process.env.ANDROID_HOME && !process.env.ANDROID_SDK_ROOT) {
+  const defaultSdkPath = path.join(process.env.LOCALAPPDATA || 'C:\\Users\\ktrip\\AppData\\Local', 'Android\\Sdk');
+  process.env.ANDROID_HOME = defaultSdkPath;
+  process.env.ANDROID_SDK_ROOT = defaultSdkPath;
+  const platformTools = path.join(defaultSdkPath, 'platform-tools');
+  const emulatorTools = path.join(defaultSdkPath, 'emulator');
+  process.env.PATH = `${process.env.PATH};${platformTools};${emulatorTools}`;
+}
+
 module.exports = {
   appiumHost: process.env.APPIUM_HOST || '127.0.0.1',
   appiumPort: parseInt(process.env.APPIUM_PORT || '4723', 10),
