@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Node & E2E Test Reports
+node_modules/
+**/node_modules/
+e2e/reports/
+
