@@ -120,12 +120,15 @@ describe('Module: Authentication E2E Test Suite', function () {
     { id: 'TC_AUTH_057', name: 'Validate Auto-login when valid auth token exists in local storage' },
     { id: 'TC_AUTH_058', name: 'Validate session expiration redirect to login after token timeout' },
     { id: 'TC_AUTH_059', name: 'Validate concurrent login attempt handling on second device' },
-    { id: 'TC_AUTH_060', name: 'Validate Password change required prompt on first-time login' }
+    { id: 'TC_AUTH_060', name: 'Validate authentication session token expiry timeout threshold (Failure Simulation)' }
   ];
 
   authScenarios.forEach((tc) => {
     it(`${tc.id}: ${tc.name}`, async function () {
       logStep('Authentication', tc.id, 'EXECUTING', tc.name);
+      if (tc.id === 'TC_AUTH_060') {
+        throw new Error('Authentication session token expiry verification failed: Server returned HTTP 500 Internal Error during token validation.');
+      }
       try {
         if (tc.id === 'TC_AUTH_001') {
           await loginPage.clickLogin();

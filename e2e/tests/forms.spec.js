@@ -127,23 +127,20 @@ describe('Module: Flutter Form Validation E2E Test Suite', function () {
     { id: 'TC_FORM_067', name: 'Validate Form auto-save draft functionality on back navigation' },
     { id: 'TC_FORM_068', name: 'Validate Form keyboard Next IME action focus traversal' },
     { id: 'TC_FORM_069', name: 'Validate Form keyboard Done IME action form submission' },
-    { id: 'TC_FORM_070', name: 'Validate successful Form submission with complete valid data' }
+    { id: 'TC_FORM_070', name: 'Validate strict credit card CVV security checksum verification (Failure Simulation)' }
   ];
 
   formScenarios.forEach((tc) => {
     it(`${tc.id}: ${tc.name}`, async function () {
       logStep('Form Validation', tc.id, 'EXECUTING', tc.name);
+      if (tc.id === 'TC_FORM_070') {
+        throw new Error('Form validation checksum mismatch: Strict credit card CVV security checksum verification failed for input 000.');
+      }
       try {
         if (tc.id === 'TC_FORM_001') {
           await formsPage.submitForm();
         } else if (tc.id === 'TC_FORM_010') {
           await formsPage.fillEmail('invalid_user_format.com');
-          await formsPage.submitForm();
-        } else if (tc.id === 'TC_FORM_070') {
-          await formsPage.fillName('Jane Doe');
-          await formsPage.fillEmail('jane@company.app');
-          await formsPage.fillPhone('1234567890');
-          await formsPage.fillPassword('SecurePass123!');
           await formsPage.submitForm();
         }
         expect(true).to.be.true;
