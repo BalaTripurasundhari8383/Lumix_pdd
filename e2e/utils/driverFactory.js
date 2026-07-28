@@ -14,21 +14,24 @@ class DriverFactory {
       return driverInstance;
     }
 
+    const primaryDriver = env.automationName || 'UiAutomator2';
+    const secondaryDriver = env.fallbackAutomationName || 'Flutter';
+
     try {
-      logger.info('Initializing Appium session with appium-flutter-driver...');
-      const flutterOptions = getAppiumOptions('Flutter');
-      driverInstance = await remote(flutterOptions);
-      currentAutomationName = 'Flutter';
-      logger.info('Appium session initialized successfully with Flutter driver.');
+      logger.info(`Initializing Appium session with ${primaryDriver} driver...`);
+      const options = getAppiumOptions(primaryDriver);
+      driverInstance = await remote(options);
+      currentAutomationName = primaryDriver;
+      logger.info(`Appium session initialized successfully with ${primaryDriver} driver.`);
       return driverInstance;
-    } catch (flutterErr) {
-      logger.warn(`Failed to launch session with appium-flutter-driver: ${flutterErr.message}`);
-      logger.info('Attempting fallback session initialization with UiAutomator2 driver...');
+    } catch (primaryErr) {
+      logger.warn(`Failed to launch session with ${primaryDriver} driver: ${primaryErr.message}`);
+      logger.info(`Attempting fallback session initialization with ${secondaryDriver} driver...`);
       try {
-        const uiAutomatorOptions = getAppiumOptions('UiAutomator2');
-        driverInstance = await remote(uiAutomatorOptions);
-        currentAutomationName = 'UiAutomator2';
-        logger.info('Fallback Appium session initialized successfully with UiAutomator2 driver.');
+        const fallbackOptions = getAppiumOptions(secondaryDriver);
+        driverInstance = await remote(fallbackOptions);
+        currentAutomationName = secondaryDriver;
+        logger.info(`Fallback Appium session initialized successfully with ${secondaryDriver} driver.`);
         return driverInstance;
       } catch (fallbackErr) {
         logger.error(`Critical Failure: Could not launch Appium session with either driver. ${fallbackErr.message}`);
