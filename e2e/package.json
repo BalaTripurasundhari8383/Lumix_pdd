@@ -27,7 +27,7 @@
   "author": "QA Automation Architect",
   "license": "MIT",
   "dependencies": {
-    "appium-flutter-finder": "^0.4.0",
+    "appium-flutter-finder": "^0.2.0",
     "chai": "^4.4.1",
     "dotenv": "^16.4.5",
     "exceljs": "^4.4.0",
