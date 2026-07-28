@@ -100,9 +100,6 @@ jobs:
         with:
           name: Flutter-E2E-Appium-Test-Artifacts
           path: |
-            e2e/reports/Flutter_E2E_Report.xlsx
-            e2e/reports/index.html
-            e2e/reports/failures/
-            e2e/reports/execution.log
+            e2e/reports/**
             appium-server.log
           retention-days: 30
