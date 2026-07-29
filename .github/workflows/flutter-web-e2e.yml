@@ -64,13 +64,16 @@ jobs:
           cd e2e-web
           npm run test:web || true
 
-      - name: 9. Upload Excel Report & Failure Screenshots
+      - name: 8.1 Ensure Excel Test Report Generation
+        if: always()
+        run: |
+          cd e2e-web
+          npm run report:excel || true
+
+      - name: 9. Upload Excel Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Flutter-Web-E2E-Excel-Report
-          path: |
-            e2e-web/reports/Flutter_Web_E2E_Report.xlsx
-            e2e-web/reports/screenshots/**
-            e2e-web/reports/e2e-web.log
+          path: e2e-web/reports/*.xlsx
           retention-days: 30
