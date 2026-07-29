@@ -10,6 +10,7 @@
     "test:components": "cd e2e && npm run test:components",
     "test:nav": "cd e2e && npm run test:nav",
     "test:ai": "cd e2e && npm run test:ai",
+    "test:load": "cd e2e && npm run test:load",
     "test:web": "cd e2e-web && npm test",
     "test:web:auth": "cd e2e-web && npm run test:auth",
     "test:web:nav": "cd e2e-web && npm run test:nav",

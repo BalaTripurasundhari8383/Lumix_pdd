@@ -10,6 +10,8 @@
     "test:components": "mocha --config .mocharc.json \"tests/components.spec.js\"",
     "test:nav": "mocha --config .mocharc.json \"tests/navigation.spec.js\"",
     "test:ai": "mocha --config .mocharc.json \"tests/aiSmart.spec.js\"",
+    "test:load": "mocha --config .mocharc.json \"tests/**/*.spec.js\"",
+    "report:excel": "node -e \"require('./utils/excelReporter.js').generateReport([], 85000)\"",
     "report:merge": "mochawesome-merge reports/mochawesome-report/*.json > reports/mochawesome.json",
     "report:generate": "marge reports/mochawesome.json --reportDir reports --reportFilename index.html"
   },

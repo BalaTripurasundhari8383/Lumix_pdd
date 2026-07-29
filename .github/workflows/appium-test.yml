@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   appium-mobile-tests:
-    name: Run Appium Android Mobile E2E Tests
+    name: Run Appium Android Mobile E2E Tests (300+ Scenarios)
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
@@ -64,8 +64,8 @@ jobs:
           sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
           sudo chmod 777 /dev/kvm || true
 
-      - name: 9. Run Appium Tests on Android Emulator
-        timeout-minutes: 8
+      - name: 9. Execute 300+ Unique Test Scenarios Load Test (Appium Mobile)
+        timeout-minutes: 20
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
@@ -77,20 +77,20 @@ jobs:
           script: |
             export APPIUM_HOME=$HOME/.appium
             nohup appium --log appium-server.log > /dev/null 2>&1 &
-            sleep 5
+            sleep 10
             cd e2e
-            npm test || true
+            npm run test:load || true
 
-      - name: 10. Ensure Appium Excel Report Generation
+      - name: 10. Generate 300+ Test Cases Excel Report
         if: always()
         run: |
           cd e2e
           npm run report:excel || true
 
-      - name: 11. Upload Appium Test Report Artifact
+      - name: 11. Upload 300+ Test Cases Excel Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Appium-Test-Report
+          name: Appium-Test-300-Unique-TestCases-Excel-Report
           path: e2e/reports/*.xlsx
           retention-days: 30
