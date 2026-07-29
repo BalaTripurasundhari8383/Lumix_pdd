@@ -10,6 +10,12 @@
     "test:components": "cd e2e && npm run test:components",
     "test:nav": "cd e2e && npm run test:nav",
     "test:ai": "cd e2e && npm run test:ai",
+    "test:web": "cd e2e-web && npm test",
+    "test:web:auth": "cd e2e-web && npm run test:auth",
+    "test:web:nav": "cd e2e-web && npm run test:nav",
+    "test:web:forms": "cd e2e-web && npm run test:forms",
+    "test:web:ai": "cd e2e-web && npm run test:ai",
+    "report:web:excel": "cd e2e-web && npm run report:excel",
     "report:merge": "cd e2e && npm run report:merge",
     "report:generate": "cd e2e && npm run report:generate"
   },

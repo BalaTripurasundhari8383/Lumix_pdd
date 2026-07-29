@@ -1,0 +1,37 @@
+{
+  "name": "flutter-web-selenium-e2e-framework",
+  "version": "1.0.0",
+  "description": "Enterprise E2E Web UI Automation Framework for Flutter Web Applications using Selenium WebDriver, Mocha, Chai & ExcelJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --config .mocharc.json \"tests/**/*.web.test.js\"",
+    "test:auth": "mocha --config .mocharc.json \"tests/auth.web.test.js\"",
+    "test:nav": "mocha --config .mocharc.json \"tests/navigation.web.test.js\"",
+    "test:forms": "mocha --config .mocharc.json \"tests/forms.web.test.js\"",
+    "test:ai": "mocha --config .mocharc.json \"tests/aiComponent.web.test.js\"",
+    "report:excel": "node -e \"require('./utils/excel-reporter.js').generateReport()\""
+  },
+  "keywords": [
+    "selenium",
+    "flutter-web",
+    "selenium-webdriver",
+    "mocha",
+    "chai",
+    "exceljs",
+    "e2e-testing",
+    "page-object-model",
+    "supabase"
+  ],
+  "author": "QA Automation Architect",
+  "license": "MIT",
+  "dependencies": {
+    "chai": "^4.4.1",
+    "chromedriver": "^127.0.0",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "mocha": "^10.7.3",
+    "mochawesome": "^7.1.3",
+    "selenium-webdriver": "^4.23.0",
+    "winston": "^3.14.2"
+  }
+}

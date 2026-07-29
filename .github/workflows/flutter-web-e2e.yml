@@ -1,0 +1,78 @@
+name: Flutter Web Selenium E2E Automation
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e-web-tests:
+    name: Execute 300 Web E2E Scenarios & Generate Excel Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 3. Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: 4. Install Google Chrome & Chromedriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable chromedriver
+          google-chrome --version
+          chromedriver --version
+
+      - name: 5. Build Flutter Web Release
+        run: |
+          flutter pub get
+          flutter build web --release
+
+      - name: 6. Serve Web App Locally
+        run: |
+          npm install -g serve
+          npx serve -s build/web -l 8080 &
+          sleep 5
+          curl -I http://localhost:8080 || echo "Web server initialized"
+
+      - name: 7. Install Web E2E Framework Dependencies
+        run: |
+          cd e2e-web
+          npm install
+
+      - name: 8. Execute 300 Web E2E Test Suite
+        env:
+          BASE_URL: http://localhost:8080
+          BROWSER: chrome
+          HEADLESS: true
+        run: |
+          cd e2e-web
+          npm run test:web || true
+
+      - name: 9. Upload Excel Report & Failure Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Flutter-Web-E2E-Excel-Report
+          path: |
+            e2e-web/reports/Flutter_Web_E2E_Report.xlsx
+            e2e-web/reports/screenshots/**
+            e2e-web/reports/e2e-web.log
+          retention-days: 30

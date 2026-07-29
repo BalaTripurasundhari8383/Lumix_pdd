@@ -1,0 +1,10 @@
+{
+  "diff": true,
+  "extension": ["js"],
+  "package": "./package.json",
+  "require": ["./tests/setup.hooks.js"],
+  "slow": "1500",
+  "timeout": "120000",
+  "ui": "bdd",
+  "bail": false
+}
