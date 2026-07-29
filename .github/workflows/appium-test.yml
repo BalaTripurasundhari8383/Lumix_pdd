@@ -1,8 +1,8 @@
-name: Flutter Android Appium 2.x E2E Automation
+name: Appium Test
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
@@ -12,7 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  e2e-tests:
+  appium-mobile-tests:
+    name: Run Appium Android Mobile E2E Tests
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
@@ -20,7 +21,7 @@ jobs:
       - name: 1. Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 2. Setup Node.js
+      - name: 2. Setup Node.js (v20)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -50,10 +51,8 @@ jobs:
           npm install -g appium@next
           appium driver install --source=npm appium-flutter-driver || true
           appium driver install uiautomator2 || true
-          appium -v
-          appium driver list
 
-      - name: 7. Install E2E Framework Dependencies
+      - name: 7. Install Mobile Framework Dependencies
         run: |
           npm install
           cd e2e
@@ -76,30 +75,21 @@ jobs:
           emulator-options: -no-window -no-snapshot-save -no-audio -no-boot-anim -camera-back none
           script: |
             export APPIUM_HOME=$HOME/.appium
-            echo "Starting Appium Server safely in background..."
             nohup appium --log appium-server.log > /dev/null 2>&1 &
             sleep 8
-            
-            echo "Verifying connected emulator via ADB..."
-            adb devices
-            
-            echo "Running E2E Test Suite..."
             cd e2e
             npm test || true
 
-      - name: 10. Generate Merged HTML & Excel Reports
+      - name: 10. Generate Appium Excel Reports
         if: always()
-        working-directory: e2e
         run: |
-          npm run report:merge || true
-          npm run report:generate || true
+          cd e2e
+          npm run report:excel || true
 
-      - name: 11. Upload E2E Test Reports & Failure Artifacts
+      - name: 11. Upload Appium Test Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Flutter-E2E-Appium-Test-Artifacts
-          path: |
-            e2e/reports/**
-            appium-server.log
+          name: Appium-Test-Report
+          path: e2e/reports/**
           retention-days: 30

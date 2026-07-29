@@ -1,0 +1,78 @@
+name: Selenium Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  selenium-web-tests:
+    name: Run Selenium Web E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 3. Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: 4. Setup Google Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: 5. Build Flutter Web Release
+        run: |
+          flutter pub get
+          flutter build web --release
+
+      - name: 6. Serve Web App Locally
+        run: |
+          npm install -g serve
+          npx serve -s build/web -l 8080 &
+          sleep 5
+
+      - name: 7. Install Web Framework Dependencies
+        run: |
+          cd e2e-web
+          npm install
+
+      - name: 8. Execute Selenium Web Tests
+        env:
+          BASE_URL: http://localhost:8080
+          BROWSER: chrome
+          HEADLESS: true
+        run: |
+          cd e2e-web
+          npm run test:web || true
+
+      - name: 9. Generate Selenium Excel Report
+        if: always()
+        run: |
+          cd e2e-web
+          npm run report:excel || true
+
+      - name: 10. Upload Selenium Test Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Selenium-Test-Report
+          path: e2e-web/reports/*.xlsx
+          retention-days: 30

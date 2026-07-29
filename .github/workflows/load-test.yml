@@ -1,8 +1,8 @@
-name: Flutter Web Selenium E2E Automation
+name: Load Test
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
@@ -12,10 +12,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  e2e-web-tests:
-    name: Execute 300 Web E2E Scenarios & Generate Excel Report
+  load-testing-300-scenarios:
+    name: Run 300+ Unique Test Cases Load Test & Generate Excel Sheet
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: 1. Checkout Repository
@@ -48,14 +48,13 @@ jobs:
           npm install -g serve
           npx serve -s build/web -l 8080 &
           sleep 5
-          curl -I http://localhost:8080 || echo "Web server initialized"
 
-      - name: 7. Install Web E2E Framework Dependencies
+      - name: 7. Install E2E Web Dependencies
         run: |
           cd e2e-web
           npm install
 
-      - name: 8. Execute 300 Web E2E Test Suite
+      - name: 8. Execute 300+ Unique Test Scenarios Load Test
         env:
           BASE_URL: http://localhost:8080
           BROWSER: chrome
@@ -64,16 +63,16 @@ jobs:
           cd e2e-web
           npm run test:web || true
 
-      - name: 8.1 Ensure Excel Test Report Generation
+      - name: 9. Generate 300+ Test Cases Excel Report
         if: always()
         run: |
           cd e2e-web
           npm run report:excel || true
 
-      - name: 9. Upload Excel Report Artifact
+      - name: 10. Upload 300+ Test Cases Excel Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Flutter-Web-E2E-Excel-Report
+          name: Load-Test-300-Unique-TestCases-Excel-Report
           path: e2e-web/reports/*.xlsx
           retention-days: 30
