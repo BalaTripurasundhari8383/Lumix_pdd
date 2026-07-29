@@ -28,6 +28,7 @@ function getConnectedDevice() {
 function getAppiumOptions(automationType = env.automationName) {
   const deviceUdid = getConnectedDevice() || env.deviceName;
   const apkExists = fs.existsSync(env.apkPath);
+  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
   const capabilities = {
     platformName: env.platformName,
@@ -55,7 +56,7 @@ function getAppiumOptions(automationType = env.automationName) {
     path: env.appiumPath,
     logLevel: 'error',
     capabilities,
-    connectionRetryTimeout: 15000,
+    connectionRetryTimeout: isCI ? 3000 : 15000,
     connectionRetryCount: 1
   };
 }

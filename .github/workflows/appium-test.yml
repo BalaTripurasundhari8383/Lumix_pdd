@@ -65,6 +65,7 @@ jobs:
           sudo chmod 777 /dev/kvm || true
 
       - name: 9. Run Appium Tests on Android Emulator
+        timeout-minutes: 8
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
@@ -76,11 +77,11 @@ jobs:
           script: |
             export APPIUM_HOME=$HOME/.appium
             nohup appium --log appium-server.log > /dev/null 2>&1 &
-            sleep 8
+            sleep 5
             cd e2e
             npm test || true
 
-      - name: 10. Generate Appium Excel Reports
+      - name: 10. Ensure Appium Excel Report Generation
         if: always()
         run: |
           cd e2e
@@ -91,5 +92,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Appium-Test-Report
-          path: e2e/reports/**
+          path: e2e/reports/*.xlsx
           retention-days: 30

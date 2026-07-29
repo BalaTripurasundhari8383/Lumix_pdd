@@ -34,6 +34,8 @@ function resolveApkPath() {
   return candidatePaths[0]; // Default fallback
 }
 
+const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+
 module.exports = {
   appiumHost: process.env.APPIUM_HOST || '127.0.0.1',
   appiumPort: parseInt(process.env.APPIUM_PORT || '4723', 10),
@@ -53,8 +55,8 @@ module.exports = {
   noReset: process.env.NO_RESET === 'true',
   fullReset: false,
 
-  explicitWaitMs: parseInt(process.env.EXPLICIT_WAIT_MS || '30000', 10),
-  commandTimeoutMs: parseInt(process.env.COMMAND_TIMEOUT_MS || '120000', 10),
+  explicitWaitMs: isCI ? 3000 : parseInt(process.env.EXPLICIT_WAIT_MS || '30000', 10),
+  commandTimeoutMs: isCI ? 15000 : parseInt(process.env.COMMAND_TIMEOUT_MS || '120000', 10),
 
   reportsDir: path.resolve(process.cwd(), process.env.REPORTS_DIR || './reports'),
   failuresDir: path.resolve(process.cwd(), process.env.FAILURES_DIR || './reports/failures')
