@@ -33,12 +33,10 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: 4. Install Google Chrome & Chromedriver
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable chromedriver
-          google-chrome --version
-          chromedriver --version
+      - name: 4. Setup Google Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
 
       - name: 5. Build Flutter Web Release
         run: |
