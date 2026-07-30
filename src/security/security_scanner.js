@@ -130,8 +130,13 @@ async function generateExcelReport(inventory, findings) {
     console.log(`Excel report generated: ${filePath}`);
 
     // Generate separate files for student friendly output
-    await (new ExcelJS.Workbook()).addWorksheet('Findings').addRows(findings).workbook.xlsx.writeFile(path.join(RESULTS_DIR, 'findings.xlsx'));
-    await (new ExcelJS.Workbook()).addWorksheet('Inventory').addRows(inventory.endpoints).workbook.xlsx.writeFile(path.join(RESULTS_DIR, 'endpoint-inventory.xlsx'));
+    const findingsWorkbook = new ExcelJS.Workbook();
+    findingsWorkbook.addWorksheet('Findings').addRows(findings);
+    await findingsWorkbook.xlsx.writeFile(path.join(RESULTS_DIR, 'findings.xlsx'));
+
+    const inventoryWorkbook = new ExcelJS.Workbook();
+    inventoryWorkbook.addWorksheet('Inventory').addRows(inventory.endpoints);
+    await inventoryWorkbook.xlsx.writeFile(path.join(RESULTS_DIR, 'endpoint-inventory.xlsx'));
 }
 
 async function generateMarkdownReports(findings) {
